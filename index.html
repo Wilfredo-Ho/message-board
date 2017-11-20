@@ -90,16 +90,7 @@
 		<div class="content">
 			<div class="part part-mes-list">
 				<h4 style="padding-bottom: 15px;">已有<span id="total">0</span>条留言</h4>
-				<div class="mes-wrapper" id="mesWrapper">
-					<!-- <div class="mes-list">
-						<div class="mes-head">
-							<span class="user">张三</span><span class="time">2017-11-20 14:45:52</span>
-						</div>
-						<div class="mes-content">
-							楼主好人
-						</div>
-					</div> -->
-				</div>
+				<div class="mes-wrapper" id="mesWrapper"></div>
 			</div>
 			<div class="part part-mes-form">
 				<form action="/" id="mesForm">
@@ -149,7 +140,7 @@
 			content: $('[name="content"]').val()
 		}
 
-		$.post('./request.php', {message: mes}, function(res){
+		$.get('./request.php', {message: mes}, function(res){
 			console.log(res);
 			if(res == "提交成功"){
 				refreshMesList();
