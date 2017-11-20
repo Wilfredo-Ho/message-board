@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>留言板</title>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			font-family: Arial,Microsoft Yahei,sans-serif;
+		}
+		.container{
+			width: 1170px;
+			margin: 0 auto;
+		}
+		.container .header{
+			width: 100%;
+			height: 63px;
+			line-height: 63px;
+			color: #098E4C;
+			font-size: 20px;
+			font-family: serif;
+			font-weight: bold;
+			text-align: center;
+			/*background-color: */
+			border-bottom: 2px solid #18A383;
+		}
+		.container .content{
+			width: 100%;
+			/*min-height: 700px;*/
+			background-color: #f3f3f3;
+		}
+		.container .footer{
+			width: 100%;
+			height: 24px;
+			line-height: 24px;
+			font-size: 14px;
+			background-color: #aaa;
+			color: #fff;
+			text-align: center;
+		}
+		.content .part{
+			padding-top: 15px;
+			padding-left: 10px;
+		}
+		.content .part-mes-form{
+			border-top: 1px solid #18A383;
+			margin-top: 15px;
+			padding-bottom: 15px;
+		}
+		.part-mes-form form{
+			padding-left: 20px;
+			width: 500px;
+		}
+		.part-mes-form form > label{
+			display: inline-block;
+			margin-bottom: 8px;
+			text-align: center;
+		}
+		.part .mes-list{
+			border-top: 1px solid #aaa;
+		}
+		.mes-wrapper .mes-head{
+			height: 30px;
+			line-height: 30px;
+		}
+		.mes-wrapper .mes-head .user{
+			display: inline-block;
+			width: 100px;
+			font-size: 16px;
+			color: #0D765E;
+			padding-left: 20px;
+		}
+		.mes-wrapper .mes-head .time{
+			font-size: 14px;
+		}
+		.mes-wrapper .mes-content{
+			color: #999;
+			font-size: 14px;
+			padding: 10px 20px;
+		}
+	</style>
+	<script
+			  src="http://code.jquery.com/jquery-3.2.1.js"
+			  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+			  crossorigin="anonymous"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="header">留言板</div>
+		<div class="content">
+			<div class="part part-mes-list">
+				<h4 style="padding-bottom: 15px;">已有<span id="total">0</span>条留言</h4>
+				<div class="mes-wrapper" id="mesWrapper">
+					<!-- <div class="mes-list">
+						<div class="mes-head">
+							<span class="user">张三</span><span class="time">2017-11-20 14:45:52</span>
+						</div>
+						<div class="mes-content">
+							楼主好人
+						</div>
+					</div> -->
+				</div>
+			</div>
+			<div class="part part-mes-form">
+				<form action="/" id="mesForm">
+					<label for="title">标题：</label><input type="text" name="title"><br>
+					<label for="name">姓名：</label><input type="text" name="name"><br>
+					<label for="content" style="vertical-align: top;">内容：</label><textarea name="content" cols="22" rows="3"></textarea>
+					<p style="padding-left: 100px;">
+						<input type="submit" id="submit" value="提交">
+						<input type="reset" value="重置">
+					</p>
+				</form>
+			</div>
+		</div>
+		<div class="footer">2017 &copy; by Wilfredo</div>
+	</div>
+</body>
+<script>
+	function refreshMesList(){
+			$.get('./mesList.php', function(res){
+				var data = JSON.parse(res);
+				var content = data.content;
+				$('#total').text(data.total);
+				var str = "";
+				for(var i in content){
+					str += '<div class="mes-list">'
+						 + '<div class="mes-head">'
+						 + '<span class="user">'+ content[i].name +'</span><span class="time">'+content[i].time+'</span>'
+						 + '</div>'
+						 + '<div class="mes-content">' + content[i].content +'</div>'
+						 + '</div>';
+ 				}
+ 				$('#mesWrapper').html(str);
+			})
+		}
+
+	refreshMesList();
+
+
+	$("#submit").on("click",function(e){
+		
+		e = e || window.event;
+		e.preventDefault();
+
+		var mes = {
+			title: $('[name="title"]').val(),
+			name: $('[name="name"]').val(),
+			content: $('[name="content"]').val()
+		}
+
+		$.post('./request.php', {message: mes}, function(res){
+			console.log(res);
+			if(res == "提交成功"){
+				refreshMesList();
+			}
+		})
+	})
+</script>
+</html>
