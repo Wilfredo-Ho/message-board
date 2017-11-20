@@ -1,5 +1,5 @@
 <?php
-	$message = $_POST["message"];
+	$message = $_GET["message"];
 	$name = $message["name"];
 	$title = $message["title"];
 	$content = $message["content"];
